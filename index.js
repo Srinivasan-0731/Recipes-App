@@ -4,6 +4,7 @@ const OrdersController = require("./controller/orders.controller");
 const ProductsController = require("./controller/Products.controller");
 const RecipesController = require("./controller/Recipes.controller");
 const { createDbConnection } = require("./db");
+const cors = require('cors');
 
 // Environment variables config
 require("dotenv").config();
@@ -14,9 +15,14 @@ createDbConnection();
 // Step 1: Create an API server
 const API_SERVER = express();
 
+API_SERVER.use(cors());
 
 // Add middleware to parse JSON data
 API_SERVER.use(express.json());
+
+API_SERVER.get('/', (req, res) => {
+  res.send('Server working');
+});
 
 // Serve static files
 API_SERVER.use(express.static("public"));
@@ -86,11 +92,10 @@ API_SERVER.post("/products/create", (request, response) => {
 
 // Step 2: Start and listen for incoming requests
 const PORT = process.env.PORT || 3000;
-const HOSTNAME = process.env.HOSTNAME || "localhost";
 
-API_SERVER.listen(PORT, HOSTNAME, () => {
+API_SERVER.listen(PORT, () => {
   console.log("Server Started");
-  console.log(`http://${HOSTNAME}:${PORT}`);
+  console.log(`Running on port ${PORT}`);
 });
 
 // const Express = require("express");
